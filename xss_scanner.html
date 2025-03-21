@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Scanner Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>XSS Scanner Tool</h2>
+    <label for="urlInput">Enter URL to scan for XSS:</label>
+    <input type="text" id="urlInput" placeholder="https://example.com">
+    <button onclick="scanXSS()">Scan for XSS</button>
+    <div id="output"></div>
+
+    <script>
+        const payloads = [
+            "<script>alert('XSS')</script>",
+            "<img src=x onerror=alert('XSS')>",
+            "<svg/onload=alert('XSS')>",
+            "<iframe src=javascript:alert('XSS')>",
+            "<script>document.write('<img src=\"x\" onerror=alert(\'XSS\')>');</script>"
+        ];
+
+        function scanXSS() {
+            const url = document.getElementById('urlInput').value;
+            const output = document.getElementById('output');
+            output.innerHTML = "";
+
+            if (!url) {
+                output.innerHTML = "Please enter a valid URL.";
+                return;
+            }
+
+            output.innerHTML = "Scanning... Please wait.";
+
+            payloads.forEach(payload => {
+                let testUrl = `${url}?q=${encodeURIComponent(payload)}`;
+
+                const img = new Image();
+                img.onload = function() {
+                    if (img.src.includes(payload)) {
+                        output.innerHTML += `<p style="color: red;">Potential XSS vulnerability detected: ${payload} on ${testUrl}</p>`;
+                    }
+                };
+                img.onerror = function() {
+                };
+                img.src = testUrl;
+            });
+        }
+    </script>
+
+</body>
+</html>

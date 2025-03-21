@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTools | URL Fuzzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            color: #5c4f7c;
+            margin-bottom: 20px;
+        }
+
+        #siteInput {
+            padding: 10px;
+            width: 300px;
+            margin: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #fuzzBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #5c4f7c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #fuzzBtn:hover {
+            background-color: #4a3d63;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #output strong {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h2>URL Fuzzer</h2>
+    <label for="siteInput">Enter the base URL to fuzz:</label>
+    <input type="text" id="siteInput" placeholder="https://example.com/">
+    <button id="fuzzBtn">Start Fuzzing</button>
+    <div id="output"></div>
+
+    <script>
+        const wordlist = [
+            "admin", "login", "dashboard", "config", "user", "profile", "private", "test", 
+            "api", "v1", "v2", "uploads", "files", "admin/login", "admin/dashboard", 
+            "admin/settings", "admin/tools", "user/settings", "user/profile", "user/login", 
+            "login.php", "register", "login.html", "logout", "forgot-password", "reset-password", 
+            "settings", "cart", "checkout", "order", "payment", "admin-api", "api/v1", "admin-panel", 
+            "admin/dashboard", "admin/login", "manager", "admin/manager", "admin/user", "admin/system", 
+            "admin/config", "admin/orders", "admin/products", "admin/categories", "admin/reports", 
+            "admin/notifications", "admin/messages", "admin/settings", "admin/analytics", 
+            "admin/tools", "admin/support", "admin/files", "data", "files/upload", "uploads/images", 
+            "media", "assets", "scripts", "css", "js", "js/scripts", "admin-area", "admin-view", 
+            "cms", "cms/content", "cms/edit", "cms/manage", "cms/settings", "cms/user", "adminpanel", 
+            "admin/manage", "admin/control", "admin/system", "admin/access", "admin/permissions", 
+            "admin/roles", "api/v1/auth", "api/v1/data", "api/v1/upload", "api/v1/user", "api/v1/profile", 
+            "api/v2/auth", "api/v2/data", "api/v2/upload", "api/v2/user", "api/v2/profile", "files/download", 
+            "files/delete", "download", "upload", "content", "content/images", "content/files", 
+            "content/uploads", "private/admin", "private/login", "private/user", "private/profile", 
+            "private/dashboard", "private/settings", "private/admin-area", "private/manager", "admin_access", 
+            "admin_login", "admin_control", "admin_dashboard", "admin_panel", "system", "system/config", 
+            "system/users", "system/backup", "system/logs", "system/settings", "backup", "logs", 
+            "debug", "debugger", "sql", "sql-backup", "sql-dump", "sql-import", "config/settings", 
+            "config/system", "config/api", "tools", "tools/debug", "tools/management", "tools/system", 
+            "tools/config", "tools/settings", "manager/settings", "manager/config", "manager/users", 
+            "manager/dashboard", "manager/control", "manager/logs", "admin/user/list", "admin/user/edit", 
+            "admin/user/delete", "admin/user/create", "admin/user/update", "admin/user/view"
+        ];
+
+        async function fuzzUrl() {
+            const output = document.getElementById('output');
+            const baseUrl = document.getElementById('siteInput').value.trim();
+
+            if (!baseUrl) {
+                output.innerHTML = 'Please enter a valid URL.';
+                return;
+            }
+
+            if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
+
+            output.innerHTML = '';
+
+            for (const word of wordlist) {
+                const url = baseUrl + word;
+                try {
+
+                    const response = await fetch(url, { method: 'GET' });
+                    const result = response.status === 200 
+                        ? `URL: ${url} | OK` 
+                        : `URL: ${url} | DENIED`;
+
+                    output.innerHTML += result + '<br>';
+                } catch (error) {
+                    const result = `Error with ${url}: DENIED (Network or CORS issue)`;
+                    output.innerHTML += result + '<br>';
+                }
+            }
+        }
+        document.getElementById('fuzzBtn').addEventListener('click', fuzzUrl);
+    </script>
+</body>
+</html>

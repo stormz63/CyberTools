@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+h2 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.enter {
+    border-radius: 60px;
+    border: none;
+    height: 50px;
+    width: 150px;
+    background-color: rgb(201, 168, 231);
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.enter:hover {
+    background-color: black;
+    color: white;
+}
+
+button{
+    border-radius: 60px;
+    border: none;
+    height: 50px;
+    width: 150px;
+    background-color: rgb(201, 168, 231);
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+button:hover{
+    background-color: black;
+    color: white;
+}
